@@ -5,26 +5,31 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:episode_app/feature/episode/model/episode.dart';
+import 'package:episode_app/feature/episode/view/episode_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:episode_app/main.dart';
-
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('EpisodeCard displays episode information',
+      (WidgetTester tester) async {
+    // Define a sample episode
+    final episode = Episode.dummy();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Build the EpisodeCard widget
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: EpisodeCardWidget(episode),
+        ),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the EpisodeCard displays the correct information
+    expect(find.text('showTitle'), findsOneWidget);
+    expect(find.text('Episode 7: Episode Title'), findsOneWidget);
+    expect(find.text('01.01.22'), findsOneWidget);
+    expect(find.byType(Image), findsOneWidget);
+    expect(find.text('12:00'), findsAtLeast(2));
   });
 }
